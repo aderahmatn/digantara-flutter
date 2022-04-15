@@ -8,17 +8,22 @@ class TextInput extends StatelessWidget {
   final TextInputType? type;
   final TextInputAction? textInputAction;
   final int? maxline;
-  const TextInput({
-    required this.hint,
-    required this.isDisable,
-    this.type,
-    this.textInputAction,
-    this.maxline,
-  });
+  final void Function()? action;
+  final TextEditingController? controller;
+  TextInput(
+      {required this.hint,
+      required this.isDisable,
+      this.type,
+      this.textInputAction,
+      this.maxline,
+      this.controller,
+      this.action});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onEditingComplete: action,
+      controller: controller,
       maxLines: (maxline == null) ? 1 : maxline,
       keyboardType: type,
       textInputAction: textInputAction,

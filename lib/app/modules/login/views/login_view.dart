@@ -11,8 +11,6 @@ import '../controllers/login_controller.dart';
 class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: dPrimaryColor,
