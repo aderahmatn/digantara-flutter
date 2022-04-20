@@ -1,7 +1,10 @@
 import 'package:digantara/app/Widgets/CardProduct.dart';
 import 'package:digantara/app/Widgets/CategoryItem.dart';
 import 'package:digantara/app/Widgets/ItemIconCategoryShop.dart';
+import 'package:digantara/app/Widgets/ProdukItem.dart';
+import 'package:digantara/app/Widgets/ShimmerWidget.dart';
 import 'package:digantara/app/modules/news/views/news_view.dart';
+import 'package:digantara/app/modules/shop/views/detail_shop_view.dart';
 import 'package:digantara/utils/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,7 @@ import '../controllers/shop_controller.dart';
 
 class ShopView extends GetView<ShopController> {
   final shopC = Get.put(ShopController());
+  final dataLength = ShopController.categoryShopList.length;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -59,7 +63,7 @@ class ShopView extends GetView<ShopController> {
           color: dPrimaryColor,
           onRefresh: shopC.refreshShop,
           child: SingleChildScrollView(
-            physics: ScrollPhysics(),
+            physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -77,6 +81,7 @@ class ShopView extends GetView<ShopController> {
                   ),
                 ),
                 SizedBox(height: 10),
+                //KATEGORI ITEM
                 Container(
                   height: 40,
                   child: Obx(() {
@@ -95,11 +100,12 @@ class ShopView extends GetView<ShopController> {
                         ),
                       );
                     } else {
+                      print(ShopController.categoryShopList.length.toString());
                       return ListView.builder(
                           physics: ScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: ShopController.categoryShopList.length,
+                          itemCount: ShopController.categoryShopList.length + 1,
                           itemBuilder: (context, index) {
                             return index == 0
                                 ? Padding(
@@ -146,6 +152,7 @@ class ShopView extends GetView<ShopController> {
                   }),
                 ),
                 SizedBox(height: 15),
+                //FORM FILTER AREA
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: dDefaultPadding),
                   child: Row(
@@ -401,25 +408,76 @@ class ShopView extends GetView<ShopController> {
                   ),
                 ),
                 SizedBox(height: 15),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: GridView.count(
-                    childAspectRatio: 1 / 1.5,
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    physics: ScrollPhysics(),
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    children: <Widget>[
-                      CardProduct(),
-                      CardProduct(),
-                      CardProduct(),
-                      CardProduct(),
-                      CardProduct(),
-                      CardProduct(),
-                    ],
-                  ),
-                ),
+                //PRODUCT CARD
+                Obx(() {
+                  if (ShopController.isLoading.value) {
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dDefaultPadding),
+                      child: GridView(
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 1 / 1.5,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
+                        children: [
+                          Container(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ShimmerWidget.rectangular(height: 150),
+                                SizedBox(height: 10),
+                                ShimmerWidget.rectangular(
+                                  height: 25,
+                                  width: 150,
+                                ),
+                                SizedBox(height: 10),
+                                ShimmerWidget.rectangular(height: 20),
+                                SizedBox(height: 5),
+                                ShimmerWidget.rectangular(height: 10),
+                              ],
+                            ),
+                          ),
+                          Container(color: Colors.red),
+                        ],
+                      ),
+                    );
+                  } else {
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dDefaultPadding),
+                      child: GridView.builder(
+                        itemCount: ShopController.productList.length,
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          childAspectRatio: 1 / 1.5,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          return CardProduct(
+                              title:
+                                  ShopController.productList[index].namaProduct,
+                              price: ShopController
+                                  .productList[index].hargaProduct,
+                              image:
+                                  ShopController.productList[index].fotoProduct,
+                              location:
+                                  ShopController.productList[index].namaDesa,
+                              action: () {
+                                Get.to(() => DetailShopView(),
+                                    arguments: index);
+                              });
+                        },
+                      ),
+                    );
+                  }
+                }),
               ],
             ),
           ),

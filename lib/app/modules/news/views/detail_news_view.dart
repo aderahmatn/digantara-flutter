@@ -37,7 +37,7 @@ class DetailNewsView extends GetView {
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   image: DecorationImage(
                       image: NetworkImage(
-                          'http://192.168.1.6:8000/image-berita/${NewsController.newsList[idNews].gambar}'),
+                          '${baseUrl}image-berita/${NewsController.newsList[idNews].gambar}'),
                       fit: BoxFit.cover),
                 ),
               ),

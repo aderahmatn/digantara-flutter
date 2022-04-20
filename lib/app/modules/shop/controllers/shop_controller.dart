@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 class ShopController extends GetxController {
   static RxBool isLoading = true.obs;
   static RxList categoryShopList = [].obs;
+  static RxList productList = [].obs;
   static RxString catShop = ''.obs;
 
   @override
@@ -14,6 +15,7 @@ class ShopController extends GetxController {
   @override
   void onReady() {
     getCategoryShop();
+    getProduct();
     super.onReady();
   }
 
@@ -27,7 +29,21 @@ class ShopController extends GetxController {
       var category = await ShopProvider.fetchCategoryShop();
       if (category != null) {
         categoryShopList.assignAll(category);
-        print('runi shop');
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  void getProduct() async {
+    isLoading(true);
+    try {
+      print('running get product');
+      var product = await ShopProvider.fetchProduct();
+      if (product != null) {
+        productList.assignAll(product);
       }
     } catch (e) {
       print(e);
@@ -39,5 +55,6 @@ class ShopController extends GetxController {
   Future<void> refreshShop() async {
     print('on refresh');
     getCategoryShop();
+    getProduct();
   }
 }

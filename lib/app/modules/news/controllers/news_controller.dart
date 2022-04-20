@@ -89,6 +89,8 @@ class NewsController extends GetxController {
       var news = await NewsProvider.fetchNews(catNews: catNews.value);
       if (news != null) {
         newsList.assignAll(news);
+      } else {
+        newsList.clear();
       }
     } catch (e) {
       print(e);

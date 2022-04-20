@@ -230,7 +230,7 @@ class NewsView extends GetView<NewsController> {
                           physics: ScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          itemCount: NewsController.categoryList.length,
+                          itemCount: NewsController.categoryList.length + 1,
                           itemBuilder: (context, index) {
                             return index == 0
                                 ? Padding(

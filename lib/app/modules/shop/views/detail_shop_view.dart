@@ -1,13 +1,17 @@
 import 'package:digantara/app/Widgets/ButtonOutlineIcon.dart';
 import 'package:digantara/app/Widgets/ButtonPrimary.dart';
+import 'package:digantara/app/modules/shop/controllers/shop_controller.dart';
+import 'package:digantara/utils/RupiahFormat.dart';
 import 'package:digantara/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class DetailShopView extends GetView {
   @override
   Widget build(BuildContext context) {
+    final idProduct = Get.arguments;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: dPrimaryColor,
@@ -33,7 +37,8 @@ class DetailShopView extends GetView {
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(5)),
                   image: DecorationImage(
-                      image: AssetImage('assets/images/banner5.png'),
+                      image: NetworkImage(
+                          '${imageProduct}${ShopController.productList[idProduct].fotoProduct}'),
                       fit: BoxFit.contain),
                 ),
               ),
@@ -46,14 +51,14 @@ class DetailShopView extends GetView {
                     color: dPrimaryColor,
                   ),
                   Text(
-                    'Majalengka',
+                    ShopController.productList[idProduct].namaDesa,
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                   ),
                 ],
               ),
               SizedBox(height: 10),
               Text(
-                'Rexus Mouse Wirelles Xierra 20Xp',
+                ShopController.productList[idProduct].namaProduct,
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -61,7 +66,10 @@ class DetailShopView extends GetView {
               ),
               SizedBox(height: 10),
               Text(
-                'Rp530.000',
+                RupiahFormat.convertToIdr(
+                    int.parse(
+                        ShopController.productList[idProduct].hargaProduct),
+                    0),
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w900,
@@ -70,8 +78,7 @@ class DetailShopView extends GetView {
               SizedBox(height: 15),
               Text.rich(
                 TextSpan(
-                  text:
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries.',
+                  text: ShopController.productList[idProduct].desckripsiProduct,
                   style:
                       TextStyle(color: Colors.black, height: 1.5, fontSize: 14),
                 ),
@@ -96,7 +103,7 @@ class DetailShopView extends GetView {
                         ),
                         SizedBox(width: 7),
                         Text(
-                          'Agus Suseno',
+                          ShopController.productList[idProduct].namaLengkap,
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
@@ -113,7 +120,12 @@ class DetailShopView extends GetView {
                         ),
                         SizedBox(width: 7),
                         Text(
-                          '2 Hari yang lalu',
+                          timeago.format(
+                            DateTime.parse(
+                              ShopController.productList[idProduct].createdAt
+                                  .toString(),
+                            ),
+                          ),
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
