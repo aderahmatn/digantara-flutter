@@ -9,18 +9,14 @@ class CategoryItem extends StatelessWidget {
   String category;
   bool isActive;
   String idCategori;
+  void Function() onTap;
 
-  CategoryItem(this.category, this.isActive, this.idCategori);
+  CategoryItem(this.category, this.isActive, this.idCategori, this.onTap);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        NewsController.catNews.value = idCategori;
-        NewsController().getNews();
-        NewsController().getCategoryNews();
-        print(NewsController.catNews.value);
-      },
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(right: 10),
         padding: EdgeInsets.symmetric(vertical: 9, horizontal: 14),

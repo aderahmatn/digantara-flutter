@@ -9,8 +9,11 @@ class LoginController extends GetxController {
   TextEditingController password = TextEditingController();
 
   void onComplete() {
-    isComplete.value = true;
-    print(isComplete.value);
+    if (username.value.text != '') {
+      print(username.value.text);
+    } else {
+      print('Username tidak boleh kosong bro!');
+    }
   }
 
   @override

@@ -2,6 +2,8 @@ import 'package:digantara/app/modules/news/controllers/news_controller.dart';
 import 'package:digantara/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class DetailNewsView extends GetView {
   final newsC = Get.put(NewsController());
@@ -53,12 +55,8 @@ class DetailNewsView extends GetView {
                     color: Colors.black),
               ),
               SizedBox(height: 15),
-              Text.rich(
-                TextSpan(
-                  text: NewsController.newsList[idNews].isiBerita,
-                  style:
-                      TextStyle(color: Colors.black, height: 1.5, fontSize: 14),
-                ),
+              Html(
+                data: NewsController.newsList[idNews].isiBerita,
               ),
               SizedBox(height: 20),
               Container(
@@ -72,7 +70,10 @@ class DetailNewsView extends GetView {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      NewsController.newsList[idNews].createdAt.toString(),
+                      timeago.format(
+                        DateTime.parse(NewsController.newsList[idNews].createdAt
+                            .toString()),
+                      ),
                       style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w400,

@@ -1,8 +1,14 @@
+import 'dart:io';
+
+import 'package:digantara/app/Widgets/ButtonOutlineIcon.dart';
+import 'package:digantara/app/Widgets/ButtonPrimary.dart';
+import 'package:digantara/app/Widgets/ButtonText.dart';
 import 'package:digantara/app/Widgets/CategoryItem.dart';
 import 'package:digantara/app/modules/news/news_category_model.dart';
 import 'package:digantara/app/modules/news/providers/banner_provider.dart';
 import 'package:digantara/app/modules/news/providers/news_provider.dart';
 import 'package:digantara/app/modules/news/banner_model.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../news_model.dart';
@@ -12,6 +18,9 @@ class NewsController extends GetxController {
   static RxList bannerList = <BannerModel>[].obs;
   static RxList categoryList = <NewsCategoryModel>[].obs;
   static RxBool isLoading = true.obs;
+  static RxBool isLoadingNews = true.obs;
+  static RxBool isLoadingCategory = true.obs;
+  static RxBool isLoadingBanner = true.obs;
   static RxString catNews = ''.obs;
 
   @override
@@ -19,6 +28,7 @@ class NewsController extends GetxController {
     getNews();
     getBanner();
     getCategoryNews();
+
     super.onInit();
   }
 
@@ -31,9 +41,9 @@ class NewsController extends GetxController {
   void onClose() {}
 
   void getCategoryNews() async {
+    isLoading(true);
     try {
       print('running get category news');
-      isLoading(true);
       var category = await NewsProvider.fetchNewsCategory();
       if (category != null) {
         categoryList.assignAll(category);
@@ -41,15 +51,26 @@ class NewsController extends GetxController {
     } catch (e) {
       print(e);
     } finally {
-      print('success get category news');
       isLoading(false);
     }
+  }
+
+  void getCategoryNewsClicked() async {
+    try {
+      print('running get category news');
+      var category = await NewsProvider.fetchNewsCategory();
+      if (category != null) {
+        categoryList.assignAll(category);
+      }
+    } catch (e) {
+      print(e);
+    } finally {}
   }
 
   void getBanner() async {
     try {
       print('running get banner');
-      isLoading(true);
+      isLoadingBanner(true);
       var banner = await BannerProvider.fetchBanner();
       if (banner != null) {
         bannerList.assignAll(banner);
@@ -57,24 +78,36 @@ class NewsController extends GetxController {
     } catch (e) {
       print(e);
     } finally {
-      print('success get banner');
-      isLoading(false);
+      isLoadingBanner(false);
     }
   }
 
   void getNews() async {
     try {
       print('running get news');
-      isLoading(true);
+      isLoadingNews(true);
       var news = await NewsProvider.fetchNews(catNews: catNews.value);
       if (news != null) {
         newsList.assignAll(news);
       }
     } catch (e) {
-      print('eror get news');
+      print(e);
+      Get.defaultDialog(
+        barrierDismissible: false,
+        title: 'Koneksi Gagal',
+        content: Center(
+          child: ButtonOutlineIcon(
+            title: 'Muat Ulang',
+            action: () {
+              refreshNews();
+              Get.back();
+            },
+            icon: Icons.refresh,
+          ),
+        ),
+      );
     } finally {
-      print('success get news');
-      isLoading(false);
+      isLoadingNews(false);
     }
   }
 

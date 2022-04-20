@@ -25,7 +25,6 @@ class NewsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(timeago.format(DateTime.parse(date)));
     return InkWell(
       onTap: action,
       child: Container(
