@@ -6,10 +6,18 @@ class PasswordInput extends StatefulWidget {
   @override
   State<PasswordInput> createState() => _PasswordInputState();
   final String? hint;
-  const PasswordInput({
-    Key? key,
-    this.hint,
-  }) : super(key: key);
+  final String? errorText;
+  final void Function(String)? onChanged;
+  final TextEditingController? controller;
+  final TextInputAction? textInputAction;
+  const PasswordInput(
+      {Key? key,
+      this.hint,
+      this.controller,
+      this.errorText,
+      this.onChanged,
+      this.textInputAction})
+      : super(key: key);
 }
 
 class _PasswordInputState extends State<PasswordInput> {
@@ -24,10 +32,14 @@ class _PasswordInputState extends State<PasswordInput> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      textInputAction: widget.textInputAction,
+      onChanged: widget.onChanged,
+      controller: widget.controller,
       obscureText: isHidden,
       style: TextStyle(
           fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
       decoration: InputDecoration(
+        errorText: widget.errorText,
         suffixIcon: IconButton(
           onPressed: () {
             passText();

@@ -54,10 +54,10 @@ class LoginView extends GetView<LoginController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextInputIcon(
-                          onComplete: controller.onComplete,
-                          controller: controller.username,
-                          hint: 'Username',
-                          icon: FontAwesomeIcons.userAlt,
+                          action: TextInputAction.next,
+                          controller: controller.email,
+                          hint: 'Email',
+                          icon: FontAwesomeIcons.solidEnvelope,
                         ),
                         SizedBox(height: 15),
                         PasswordInputIcon(
@@ -69,7 +69,7 @@ class LoginView extends GetView<LoginController> {
                             isDisable: !controller.isComplete.value,
                             title: 'Masuk',
                             action: () {
-                              print(controller.username.value.text);
+                              print(controller.email.value.text);
                               print(controller.password.value.text);
                             },
                           );

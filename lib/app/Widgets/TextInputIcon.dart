@@ -6,16 +6,24 @@ class TextInputIcon extends StatelessWidget {
   final TextEditingController? controller;
   final IconData icon;
   final void Function()? onComplete;
+  final TextInputAction? action;
+  final void Function(String)? onChanged;
+
   TextInputIcon(
       {required this.hint,
       required this.icon,
       this.controller,
-      this.onComplete});
+      this.onComplete,
+      this.action,
+      this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: onChanged,
+      textInputAction: action,
       onEditingComplete: onComplete,
+      autocorrect: false,
       controller: controller,
       style: TextStyle(
           fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),

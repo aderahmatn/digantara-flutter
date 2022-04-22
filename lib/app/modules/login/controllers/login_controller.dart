@@ -1,18 +1,23 @@
+import 'package:digantara/utils/Helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   RxBool isLogin = false.obs;
   RxBool isComplete = false.obs;
+  RxString emailError = ''.obs;
+  RxString passwordError = ''.obs;
 
-  TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  void onComplete() {
-    if (username.value.text != '') {
-      print(username.value.text);
+  void emailValidation(String value) {
+    if (value.isEmpty) {
+      emailError.value = 'Tidak boleh kosong';
+    } else if (!isEmail(value)) {
+      emailError.value = 'Email tidak valid';
     } else {
-      print('Username tidak boleh kosong bro!');
+      emailError.value = '';
     }
   }
 
@@ -28,7 +33,7 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    username.dispose();
+    email.dispose();
     password.dispose();
   }
 }

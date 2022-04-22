@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:digantara/app/Widgets/ButtonOutlineIcon.dart';
 import 'package:digantara/app/Widgets/ButtonPrimary.dart';
 import 'package:digantara/app/Widgets/PasswordInput.dart';
 import 'package:digantara/app/Widgets/TextInput.dart';
-import 'package:digantara/app/routes/app_pages.dart';
 import 'package:digantara/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,7 +22,12 @@ class RegisterView extends GetView<RegisterController> {
         ),
         body: Obx(() {
           if (RegisterController.isLoading.value == true) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              backgroundColor: dPrimaryColor,
+              color: Colors.white,
+              strokeWidth: 5,
+            ));
           } else {
             return Theme(
               data: Theme.of(context).copyWith(
@@ -63,16 +69,15 @@ class RegisterView extends GetView<RegisterController> {
                               child: Expanded(
                                 child: Obx(() {
                                   return ButtonPrimary(
-                                      isDisable:
-                                          RegisterController.isDisable.value,
-                                      title: controller.index.value != 2
-                                          ? 'Lanjutkan'
-                                          : 'Selesai',
-                                      action: controller.index.value != 2
-                                          ? details.onStepContinue
-                                          : () {
-                                              Get.offAllNamed(Routes.HOME);
-                                            });
+                                    isDisable:
+                                        RegisterController.isDisable.value,
+                                    title: controller.index.value != 2
+                                        ? 'Lanjutkan'
+                                        : 'Selesai',
+                                    action: controller.index.value == 2
+                                        ? RegisterController.submitRegitrasi
+                                        : details.onStepContinue,
+                                  );
                                 }),
                               ),
                             ),
@@ -113,16 +118,21 @@ class RegisterView extends GetView<RegisterController> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                TextInput(
-                                  action: () {
-                                    RegisterController.checkNik(
-                                        RegisterController.nik.value.text);
-                                  },
-                                  hint: 'NIK KTP',
-                                  controller: RegisterController.nik,
-                                  isDisable: false,
-                                  type: TextInputType.number,
-                                ),
+                                Obx(() {
+                                  return TextInput(
+                                    onChanged: RegisterController.nikValidation,
+                                    action: () {
+                                      RegisterController.checkNik(
+                                          RegisterController.nik.value.text);
+                                    },
+                                    hint: 'NIK KTP',
+                                    controller: RegisterController.nik,
+                                    isDisable: false,
+                                    type: TextInputType.number,
+                                    errorText:
+                                        RegisterController.nikError.value,
+                                  );
+                                }),
                                 SizedBox(height: 10),
                                 Divider(),
                                 SizedBox(height: 30),
@@ -210,21 +220,18 @@ class RegisterView extends GetView<RegisterController> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                TextInput(
-                                  controller: RegisterController.username,
-                                  hint: 'Username',
-                                  isDisable: false,
-                                  textInputAction: TextInputAction.next,
-                                  action: () {
-                                    RegisterController.penduduk.add({
-                                      'username':
-                                          RegisterController.username.value.text
-                                    });
-                                    print(RegisterController.penduduk[1]
-                                        ['username']);
-                                    // RegisterController.penduduk.
-                                  },
-                                ),
+                                Obx(() {
+                                  return TextInput(
+                                    onChanged:
+                                        RegisterController.usernameValidation,
+                                    errorText:
+                                        RegisterController.usernameError.value,
+                                    controller: RegisterController.username,
+                                    hint: 'Username',
+                                    isDisable: false,
+                                    textInputAction: TextInputAction.next,
+                                  );
+                                }),
                                 SizedBox(height: 15),
                                 Text(
                                   'Nomor Telepon',
@@ -234,11 +241,19 @@ class RegisterView extends GetView<RegisterController> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                TextInput(
-                                  hint: 'Nomor telepon',
-                                  isDisable: false,
-                                  type: TextInputType.number,
-                                ),
+                                Obx(() {
+                                  return TextInput(
+                                    onChanged:
+                                        RegisterController.phoneValidation,
+                                    errorText:
+                                        RegisterController.phoneError.value,
+                                    controller: RegisterController.phone,
+                                    hint: 'Nomor telepon',
+                                    isDisable: false,
+                                    type: TextInputType.number,
+                                    textInputAction: TextInputAction.next,
+                                  );
+                                }),
                                 SizedBox(height: 15),
                                 Text(
                                   'Email',
@@ -248,11 +263,19 @@ class RegisterView extends GetView<RegisterController> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                TextInput(
-                                  hint: 'Alamat email',
-                                  isDisable: false,
-                                  type: TextInputType.emailAddress,
-                                ),
+                                Obx(() {
+                                  return TextInput(
+                                    onChanged:
+                                        RegisterController.emailValidation,
+                                    errorText:
+                                        RegisterController.emailError.value,
+                                    controller: RegisterController.email,
+                                    hint: 'Alamat email',
+                                    isDisable: false,
+                                    type: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
+                                  );
+                                }),
                                 SizedBox(height: 15),
                                 Text(
                                   'Kata Sandi (Minimal 6 karater)',
@@ -262,9 +285,17 @@ class RegisterView extends GetView<RegisterController> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                PasswordInput(
-                                  hint: 'Kata sandi',
-                                ),
+                                Obx(() {
+                                  return PasswordInput(
+                                    controller: RegisterController.password,
+                                    onChanged:
+                                        RegisterController.passwordValidation,
+                                    errorText:
+                                        RegisterController.passwordError.value,
+                                    hint: 'Kata sandi',
+                                    textInputAction: TextInputAction.next,
+                                  );
+                                }),
                                 SizedBox(height: 15),
                                 Text(
                                   'Ulangi Kata Sandi ',
@@ -274,9 +305,17 @@ class RegisterView extends GetView<RegisterController> {
                                   ),
                                 ),
                                 SizedBox(height: 10),
-                                PasswordInput(
-                                  hint: 'Ulangi kata sandi',
-                                ),
+                                Obx(() {
+                                  return PasswordInput(
+                                    controller: RegisterController.cpassword,
+                                    onChanged:
+                                        RegisterController.cPasswordValidation,
+                                    errorText:
+                                        RegisterController.cPasswordError.value,
+                                    hint: 'Ulangi kata sandi',
+                                    textInputAction: TextInputAction.done,
+                                  );
+                                }),
                                 SizedBox(height: 30),
                               ],
                             ),
@@ -465,6 +504,116 @@ class RegisterView extends GetView<RegisterController> {
                                     ],
                                   ),
                                 ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      flex: 1,
+                                      child: AspectRatio(
+                                        aspectRatio: 2 / 1.3,
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                width: 1, color: dPrimaryColor),
+                                          ),
+                                          child: Obx(() {
+                                            return RegisterController
+                                                        .ktpBasename.value !=
+                                                    ''
+                                                ? ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            9),
+                                                    child: Image.file(
+                                                      File(RegisterController
+                                                          .ktpBasename.value),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                : Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.image_outlined,
+                                                        color: Colors.grey[300],
+                                                        size: 50,
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        'Foto KTP',
+                                                        style: TextStyle(
+                                                            fontSize: 10,
+                                                            color: Colors
+                                                                .grey[400]),
+                                                      ),
+                                                    ],
+                                                  );
+                                          }),
+                                        ),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      flex: 1,
+                                      child: AspectRatio(
+                                        aspectRatio: 2 / 1.3,
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[100],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                width: 1, color: dPrimaryColor),
+                                          ),
+                                          child: Obx(() {
+                                            return RegisterController
+                                                        .selfieBasename.value !=
+                                                    ''
+                                                ? ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            9),
+                                                    child: Image.file(
+                                                      File(RegisterController
+                                                          .selfieBasename
+                                                          .value),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  )
+                                                : Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.image_outlined,
+                                                        color: Colors.grey[300],
+                                                        size: 50,
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      Text(
+                                                        'Foto Selfie dengan KTP',
+                                                        style: TextStyle(
+                                                            fontSize: 10,
+                                                            color: Colors
+                                                                .grey[400]),
+                                                      ),
+                                                    ],
+                                                  );
+                                          }),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 SizedBox(height: 20),
                                 ButtonOutlineIcon(
                                   title: 'Unggah foto e-KTP anda',
@@ -487,9 +636,8 @@ class RegisterView extends GetView<RegisterController> {
                                                 // contentPadding: EdgeInsets.all(0),
                                                 minLeadingWidth: 0.1,
                                                 minVerticalPadding: 0.1,
-                                                onTap: () {
-                                                  print('ambil dari galeri');
-                                                },
+                                                onTap: RegisterController
+                                                    .pickImageKtpFromGallery,
                                                 leading: Icon(
                                                   FontAwesomeIcons.photoVideo,
                                                   size: 15,
@@ -504,9 +652,8 @@ class RegisterView extends GetView<RegisterController> {
                                                 // contentPadding: EdgeInsets.all(0),
                                                 minLeadingWidth: 0.1,
                                                 minVerticalPadding: 0.1,
-                                                onTap: () {
-                                                  print('Ambil gambar');
-                                                },
+                                                onTap: RegisterController
+                                                    .pickImageKtpFromCamera,
                                                 leading: Icon(
                                                   FontAwesomeIcons.camera,
                                                   size: 15,
@@ -546,9 +693,8 @@ class RegisterView extends GetView<RegisterController> {
                                                 // contentPadding: EdgeInsets.all(0),
                                                 minLeadingWidth: 0.1,
                                                 minVerticalPadding: 0.1,
-                                                onTap: () {
-                                                  print('ambil dari galeri');
-                                                },
+                                                onTap: RegisterController
+                                                    .pickImageSelfieFromGallery,
                                                 leading: Icon(
                                                   FontAwesomeIcons.photoVideo,
                                                   size: 15,
@@ -563,9 +709,8 @@ class RegisterView extends GetView<RegisterController> {
                                                 // contentPadding: EdgeInsets.all(0),
                                                 minLeadingWidth: 0.1,
                                                 minVerticalPadding: 0.1,
-                                                onTap: () {
-                                                  print('Ambil gambar');
-                                                },
+                                                onTap: RegisterController
+                                                    .pickImageSelfieFromCamera,
                                                 leading: Icon(
                                                   FontAwesomeIcons.camera,
                                                   size: 15,
