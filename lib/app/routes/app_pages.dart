@@ -10,6 +10,8 @@ import '../modules/halodoc/bindings/halodoc_binding.dart';
 import '../modules/halodoc/views/halodoc_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/home_user/bindings/home_user_binding.dart';
+import '../modules/home_user/views/home_user_view.dart';
 import '../modules/informasi_desa/bindings/informasi_desa_binding.dart';
 import '../modules/informasi_desa/views/informasi_desa_view.dart';
 import '../modules/kontak/bindings/kontak_binding.dart';
@@ -162,6 +164,11 @@ class AppPages {
       name: _Paths.KONTAK,
       page: () => KontakView(),
       binding: KontakBinding(),
+    ),
+    GetPage(
+      name: _Paths.HOME_USER,
+      page: () => HomeUserView(),
+      binding: HomeUserBinding(),
     ),
   ];
 }

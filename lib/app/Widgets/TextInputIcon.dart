@@ -8,6 +8,8 @@ class TextInputIcon extends StatelessWidget {
   final void Function()? onComplete;
   final TextInputAction? action;
   final void Function(String)? onChanged;
+  final String? errorText;
+  final TextInputType? type;
 
   TextInputIcon(
       {required this.hint,
@@ -15,11 +17,14 @@ class TextInputIcon extends StatelessWidget {
       this.controller,
       this.onComplete,
       this.action,
-      this.onChanged});
+      this.onChanged,
+      this.errorText,
+      this.type});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      keyboardType: type,
       onChanged: onChanged,
       textInputAction: action,
       onEditingComplete: onComplete,
@@ -28,6 +33,8 @@ class TextInputIcon extends StatelessWidget {
       style: TextStyle(
           fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
       decoration: InputDecoration(
+        errorText: errorText,
+        errorStyle: TextStyle(color: Colors.amber),
         prefixIcon: Icon(
           icon,
           color: dPrimaryColor,

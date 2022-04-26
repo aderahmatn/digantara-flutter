@@ -1,4 +1,5 @@
 import 'package:digantara/app/Widgets/ButtonPrimary.dart';
+import 'package:digantara/app/Widgets/LoadingIndicator.dart';
 import 'package:digantara/app/Widgets/PasswordInputIcon.dart';
 import 'package:digantara/app/Widgets/TextInputIcon.dart';
 import 'package:digantara/utils/constant.dart';
@@ -17,72 +18,88 @@ class LoginView extends GetView<LoginController> {
         elevation: 0,
         toolbarHeight: 30,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                color: dPrimaryColor,
-                image: DecorationImage(
-                  image: AssetImage('assets/images/brand.jpeg'),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return LoadingIndicator();
+        } else {
+          return Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: dPrimaryColor,
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/brand.jpeg'),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Stack(
-              children: [
-                Container(
-                  color: dPrimaryColor,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
+              Expanded(
+                flex: 2,
+                child: Stack(
+                  children: [
+                    Container(
+                      color: dPrimaryColor,
                     ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 30,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextInputIcon(
-                          action: TextInputAction.next,
-                          controller: controller.email,
-                          hint: 'Email',
-                          icon: FontAwesomeIcons.solidEnvelope,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
                         ),
-                        SizedBox(height: 15),
-                        PasswordInputIcon(
-                          controller: controller.password,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: 30,
+                          left: 20,
+                          right: 20,
                         ),
-                        SizedBox(height: 25),
-                        Obx(() {
-                          return ButtonPrimary(
-                            isDisable: !controller.isComplete.value,
-                            title: 'Masuk',
-                            action: () {
-                              print(controller.email.value.text);
-                              print(controller.password.value.text);
-                            },
-                          );
-                        })
-                      ],
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextInputIcon(
+                              onChanged: controller.emailValidation,
+                              type: TextInputType.emailAddress,
+                              action: TextInputAction.next,
+                              controller: controller.email,
+                              hint: 'Email',
+                              icon: FontAwesomeIcons.solidEnvelope,
+                              errorText: controller.emailError.value,
+                            ),
+                            SizedBox(height: 10),
+                            PasswordInputIcon(
+                              errorText: controller.passwordError.value,
+                              onChanged: controller.passwordValidation,
+                              controller: controller.password,
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
+          );
+        }
+      }),
+      bottomNavigationBar: Obx(() {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          margin: EdgeInsets.only(bottom: 10),
+          height: Get.height / 15,
+          child: ButtonPrimary(
+            isDisable: !controller.isComplete.value,
+            title: 'Masuk',
+            action: controller.submitLogin,
           ),
-        ],
-      ),
+          color: Colors.transparent,
+          width: 0,
+        );
+      }),
     );
   }
 }

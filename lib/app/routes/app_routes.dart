@@ -27,6 +27,7 @@ abstract class Routes {
   static const PRODUK_SAYA = _Paths.PRODUK_SAYA;
   static const NOTIFIKASI = _Paths.NOTIFIKASI;
   static const KONTAK = _Paths.KONTAK;
+  static const HOME_USER = _Paths.HOME_USER;
 }
 
 abstract class _Paths {
@@ -53,4 +54,5 @@ abstract class _Paths {
   static const PRODUK_SAYA = '/produk-saya';
   static const NOTIFIKASI = '/notifikasi';
   static const KONTAK = '/kontak';
+  static const HOME_USER = '/home-user';
 }

@@ -1,8 +1,11 @@
 import 'package:digantara/app/Widgets/MenuIcon.dart';
+import 'package:digantara/app/Widgets/UsernameCard.dart';
 import 'package:digantara/app/routes/app_pages.dart';
+import 'package:digantara/utils/StringExtention.dart' as strExtention;
 import 'package:digantara/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:get/get.dart';
@@ -77,38 +80,8 @@ class BerandaView extends GetView<BerandaController> {
                               onTap: () {
                                 Get.toNamed(Routes.DETAIL_AKUN);
                               },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.solidUserCircle,
-                                    color: dPrimaryColor,
-                                    size: 30,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Halo, Rahmat Ade Nurdiyana',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      SizedBox(height: 2),
-                                      Text(
-                                        'Klik disini untuk melihat akun kamu',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 13),
-                                      ),
-                                    ],
-                                  )
-                                ],
+                              child: UsernameCard(
+                                name: GetStorage().read('namaLengkap'),
                               ),
                             ),
                           ),

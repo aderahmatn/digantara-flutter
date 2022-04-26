@@ -80,20 +80,23 @@ class DetailAkunView extends GetView<DetailAkunController> {
                     title: 'Keluar',
                     action: () {
                       Get.defaultDialog(
-                        title: 'Konfirmasi Keluar',
-                        content: Text('Keluar dari aplikasi DIGANTARA?'),
-                        radius: 5,
-                        buttonColor: dPrimaryColor,
-                        cancelTextColor: dPrimaryColor,
-                        confirmTextColor: Colors.white,
-                        textConfirm: 'Tidak',
-                        textCancel: 'Ya',
-                        titlePadding: EdgeInsets.all(20),
-                        titleStyle: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
+                          title: 'Konfirmasi Keluar',
+                          content: Text('Keluar dari aplikasi DIGANTARA?'),
+                          radius: 5,
+                          buttonColor: dPrimaryColor,
+                          cancelTextColor: dPrimaryColor,
+                          confirmTextColor: Colors.white,
+                          textConfirm: 'Tidak',
+                          textCancel: 'Ya',
+                          titlePadding: EdgeInsets.all(20),
+                          titleStyle: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          onCancel: controller.logout,
+                          onConfirm: () {
+                            Get.back();
+                          });
                     })
               ],
             ),

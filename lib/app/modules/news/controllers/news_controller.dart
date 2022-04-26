@@ -10,10 +10,12 @@ import 'package:digantara/app/modules/news/providers/news_provider.dart';
 import 'package:digantara/app/modules/news/banner_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../news_model.dart';
 
 class NewsController extends GetxController {
+  static RxBool isLogin = false.obs;
   static RxList newsList = <NewsModel>[].obs;
   static RxList bannerList = <BannerModel>[].obs;
   static RxList categoryList = <NewsCategoryModel>[].obs;
@@ -25,10 +27,10 @@ class NewsController extends GetxController {
 
   @override
   void onInit() {
+    checkLogin();
     getNews();
     getBanner();
     getCategoryNews();
-
     super.onInit();
   }
 
@@ -39,6 +41,16 @@ class NewsController extends GetxController {
 
   @override
   void onClose() {}
+
+  void checkLogin() {
+    print('check user token from news controller');
+    print('TOKEN :  ${GetStorage().read('token')}');
+    var token = GetStorage().read('token');
+    if (token != null) {
+      isLogin.value = true;
+      print(isLogin.value);
+    }
+  }
 
   void getCategoryNews() async {
     isLoading(true);

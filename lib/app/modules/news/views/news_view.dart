@@ -4,21 +4,25 @@ import 'package:digantara/app/Widgets/CategoryItem.dart';
 import 'package:digantara/app/Widgets/NewsItem.dart';
 import 'package:digantara/app/Widgets/ShimmerWidget.dart';
 import 'package:digantara/app/Widgets/TopBanner.dart';
+import 'package:digantara/app/Widgets/UsernameCard.dart';
 import 'package:digantara/app/Widgets/newsItemShimmer.dart';
+import 'package:digantara/app/modules/home/controllers/home_controller.dart';
+import 'package:digantara/app/modules/login/controllers/login_controller.dart';
 import 'package:digantara/app/modules/news/views/detail_news_view.dart';
 import 'package:digantara/app/routes/app_pages.dart';
 import 'package:digantara/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../controllers/news_controller.dart';
 
 class NewsView extends GetView<NewsController> {
   final newsC = Get.put(NewsController());
+  final LoginC = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -79,60 +83,70 @@ class NewsView extends GetView<NewsController> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Get.toNamed(Routes.LOGIN);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.account_circle_outlined,
-                                      color: dPrimaryColor,
+                          child: Obx(() {
+                            if (LoginC.isLogin.value == false) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      Get.toNamed(Routes.LOGIN);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.account_circle_outlined,
+                                          color: dPrimaryColor,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Masuk Akun',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'Masuk Akun',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: VerticalDivider(
+                                      color: dPrimaryColor.withOpacity(0.5),
+                                      thickness: 1.4,
                                     ),
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 8),
-                                child: VerticalDivider(
-                                  color: dPrimaryColor.withOpacity(0.5),
-                                  thickness: 1.4,
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Get.toNamed(Routes.REGISTER);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.post_add_rounded,
-                                      color: dPrimaryColor,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Get.toNamed(Routes.REGISTER);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.post_add_rounded,
+                                          color: dPrimaryColor,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Daftar',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      'Daftar',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return UsernameCard(
+                                name:
+                                    GetStorage().read('namaLengkap').toString(),
+                              );
+                            }
+                          }),
                         ),
                       ),
                       Obx(() {

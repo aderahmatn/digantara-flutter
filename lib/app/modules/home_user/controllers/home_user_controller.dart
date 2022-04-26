@@ -7,12 +7,12 @@ import 'package:digantara/app/modules/sos/views/sos_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
+class HomeUserController extends GetxController {
   RxInt tabIndex = 0.obs;
-  static RxBool isLogin = false.obs;
 
   @override
   void onInit() {
+    tabIndex.value = 0;
     super.onInit();
   }
 
@@ -21,14 +21,6 @@ class HomeController extends GetxController {
   }
 
   List<Widget> myWidget = [
-    NewsView(),
-    ShopView(),
-    BerandaView(),
-    SosView(),
-    NotifikasiView(),
-    KontakView()
-  ];
-  List<Widget> myWidgetNotLogin = [
     NewsView(),
     ShopView(),
   ];

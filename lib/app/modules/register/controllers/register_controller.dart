@@ -50,24 +50,6 @@ class RegisterController extends GetxController {
 
   static void submitRegitrasi() async {
     try {
-      List<int> imageBytesKtp = fotoKtp!.readAsBytesSync();
-      List<int> imageBytesSelfie = fotoSelfie!.readAsBytesSync();
-      String baseimageKtp = base64Encode(imageBytesKtp);
-      String baseimageSelfie = base64Encode(imageBytesSelfie);
-      isLoading.value = true;
-      // var res = await http.post(
-      //   Uri.parse('${baseUrl}api/registrasi'),
-      //   body: {
-      //     'penduduk_id': penduduk[0]['idPenduduk'].toString(),
-      //     'username': username.text,
-      //     'email': email.text,
-      //     'nomorTlp': phone.text,
-      //     'password': password.text,
-      //     'confrmpassword': cpassword.text,
-      //     'fotoKtp': fotoKtp!.path,
-      //     'fotoSelfie': fotoSelfie!.path
-      //   },
-      // );
       var request = http.MultipartRequest(
         'POST',
         Uri.parse('${baseUrl}api/registrasi'),
