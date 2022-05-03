@@ -24,8 +24,7 @@ class DetailAkunController extends GetxController {
 
   void logout() async {
     LoginC.isLogin.value = false;
-    await GetStorage().remove('token');
-    await GetStorage().remove('namaLengkap');
+    await GetStorage().erase();
     HomeC.changeTabIndex(0);
     Get.back();
   }

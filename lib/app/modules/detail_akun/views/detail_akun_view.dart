@@ -6,8 +6,10 @@ import 'package:digantara/utils/constant.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../controllers/detail_akun_controller.dart';
+import 'package:digantara/utils/StringExtention.dart';
 
 class DetailAkunView extends GetView<DetailAkunController> {
   @override
@@ -33,19 +35,20 @@ class DetailAkunView extends GetView<DetailAkunController> {
               children: [
                 detailItem(
                   title: 'NIK',
-                  value: '123456789123456',
+                  value: GetStorage().read('nik'),
                 ),
                 detailItem(
                   title: 'Nama Lengkap',
-                  value: 'Ade Rahmat Nurdiyana',
+                  value:
+                      GetStorage().read('namaLengkap').toString().toTitleCase(),
                 ),
                 detailItem(
-                  title: 'Username',
-                  value: 'aderahmatn',
+                  title: 'Email',
+                  value: 'e',
                 ),
                 detailItem(
                   title: 'Nomor Telepon',
-                  value: '087776451664',
+                  value: GetStorage().read('nomorTlp'),
                 ),
                 detailItem(
                   title: 'Provinsi',

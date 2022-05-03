@@ -29,7 +29,6 @@ class LoginController extends GetxController {
     print('isLogin : ${isLogin.value}');
   }
 
-  void logout() {}
   void emailValidation(String value) {
     if (value.isEmpty) {
       emailError.value = 'Tidak boleh kosong';
@@ -70,16 +69,25 @@ class LoginController extends GetxController {
       });
       if (res.statusCode == 200) {
         var jsonRes = json.decode(res.body);
-        print(jsonRes['data']['namaLengkap']);
-        final storage = GetStorage();
-        storage.write('token', jsonRes['access_token'].toString());
-        storage.write('namaLengkap', jsonRes['data']['namaLengkap'].toString());
-        print('Token : ${storage.read('token')}');
-        print('Nama : ${storage.read('namaLengkap')}');
-        isLogin.value = true;
-        isLoading.value = false;
-        isComplete.value = true;
-        Get.back();
+        if (jsonRes['message'] == 'inactive_user') {
+          snackbarCustom('Akun Belum Aktif',
+              'Silahkan hubungin admin desa untuk aktivasi akun anda!');
+          isLoading.value = false;
+          isComplete.value = true;
+        } else {
+          print(jsonRes['data']['namaLengkap']);
+          final storage = GetStorage();
+          storage.write('token', jsonRes['access_token'].toString());
+          storage.write(
+              'namaLengkap', jsonRes['data']['namaLengkap'].toString());
+          storage.write('nomorTlp', jsonRes['data']['nomorTlp'].toString());
+          storage.write('nik', jsonRes['data']['nik'].toString());
+
+          isLogin.value = true;
+          isLoading.value = false;
+          isComplete.value = true;
+          Get.back();
+        }
       } else {
         print(res.body);
         isLoading.value = false;

@@ -141,9 +141,15 @@ class NewsView extends GetView<NewsController> {
                                 ],
                               );
                             } else {
-                              return UsernameCard(
-                                name:
-                                    GetStorage().read('namaLengkap').toString(),
+                              return InkWell(
+                                onTap: () {
+                                  Get.toNamed(Routes.DETAIL_AKUN);
+                                },
+                                child: UsernameCard(
+                                  name: GetStorage()
+                                      .read('namaLengkap')
+                                      .toString(),
+                                ),
                               );
                             }
                           }),

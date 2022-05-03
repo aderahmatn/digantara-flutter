@@ -1,11 +1,30 @@
+import 'package:digantara/app/modules/informasi_desa/providers/informasi_desa_provider.dart';
 import 'package:get/get.dart';
 
 class InformasiDesaController extends GetxController {
-  //TODO: Implement InformasiDesaController
+  static RxBool isLoading = true.obs;
+  static RxList informasiDesaList = [].obs;
+  static int idDesa = 3201020002;
 
-  final count = 0.obs;
+  getInformasiDesa() async {
+    isLoading(true);
+    try {
+      print('get informasi desa');
+      var informasiDesa =
+          await InformasiDesaProvider.fetchInformasiDesa(idDesa);
+      if (informasiDesa != null) {
+        informasiDesaList.assignAll(informasiDesa);
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading(false);
+    }
+  }
+
   @override
   void onInit() {
+    getInformasiDesa();
     super.onInit();
   }
 
@@ -16,5 +35,4 @@ class InformasiDesaController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }

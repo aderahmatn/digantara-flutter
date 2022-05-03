@@ -31,6 +31,10 @@ class ShopView extends GetView<ShopController> {
                   ),
             ),
             child: TextField(
+              onChanged: (value) {
+                shopC.searchProduct(value);
+              },
+              controller: shopC.cari,
               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
               decoration: InputDecoration(
                 hintText: 'Cari Barang',
@@ -100,7 +104,6 @@ class ShopView extends GetView<ShopController> {
                         ),
                       );
                     } else {
-                      print(ShopController.categoryShopList.length.toString());
                       return ListView.builder(
                           physics: ScrollPhysics(),
                           shrinkWrap: true,
@@ -108,45 +111,53 @@ class ShopView extends GetView<ShopController> {
                           itemCount: ShopController.categoryShopList.length + 1,
                           itemBuilder: (context, index) {
                             return index == 0
-                                ? Padding(
-                                    padding: EdgeInsets.only(left: 15),
-                                    child: CategoryItem(
-                                        'Semua',
-                                        ShopController.catShop.value
-                                                    .toString() ==
-                                                ''
-                                            ? true
-                                            : false,
-                                        '', () {
-                                      ShopController.catShop.value = '';
-                                      ShopController().getCategoryShop();
-                                    }),
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.only(
-                                        left: index == 0 ? 15 : 0),
-                                    child: CategoryItem(
-                                        ShopController
-                                            .categoryShopList[index - 1]
-                                            .kategoriProduct,
-                                        ShopController.catShop.value
-                                                    .toString() ==
-                                                ShopController
-                                                    .categoryShopList[index - 1]
-                                                    .id
-                                                    .toString()
-                                            ? true
-                                            : false,
-                                        ShopController
-                                            .categoryShopList[index - 1].id
-                                            .toString(), () {
-                                      ShopController.catShop.value =
+                                ? Obx(() {
+                                    return Padding(
+                                      padding: EdgeInsets.only(left: 15),
+                                      child: CategoryItem(
+                                          'Semua',
+                                          ShopController.catShop.value
+                                                      .toString() ==
+                                                  ''
+                                              ? true
+                                              : false,
+                                          '', () {
+                                        ShopController.catShop.value = '';
+                                        ShopController().refreshShop();
+                                      }),
+                                    );
+                                  })
+                                : Obx(() {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                          left: index == 0 ? 15 : 0),
+                                      child: CategoryItem(
+                                          ShopController
+                                              .categoryShopList[index - 1]
+                                              .kategoriProduct,
+                                          ShopController.catShop.value
+                                                      .toString() ==
+                                                  ShopController
+                                                      .categoryShopList[
+                                                          index - 1]
+                                                      .id
+                                                      .toString()
+                                              ? true
+                                              : false,
                                           ShopController
                                               .categoryShopList[index - 1].id
-                                              .toString();
-                                      ShopController().getCategoryShop();
-                                    }),
-                                  );
+                                              .toString(), () {
+                                        ShopController.catShop.value =
+                                            ShopController
+                                                .categoryShopList[index - 1].id
+                                                .toString();
+                                        ShopController().filterCategoryProduct(
+                                            ShopController
+                                                .categoryShopList[index - 1]
+                                                .kategoriProduct);
+                                      }),
+                                    );
+                                  });
                           });
                     }
                   }),
@@ -424,24 +435,10 @@ class ShopView extends GetView<ShopController> {
                           crossAxisSpacing: 10,
                         ),
                         children: [
-                          Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ShimmerWidget.rectangular(height: 150),
-                                SizedBox(height: 10),
-                                ShimmerWidget.rectangular(
-                                  height: 25,
-                                  width: 150,
-                                ),
-                                SizedBox(height: 10),
-                                ShimmerWidget.rectangular(height: 20),
-                                SizedBox(height: 5),
-                                ShimmerWidget.rectangular(height: 10),
-                              ],
-                            ),
-                          ),
-                          Container(color: Colors.red),
+                          productItemShimmer(),
+                          productItemShimmer(),
+                          productItemShimmer(),
+                          productItemShimmer(),
                         ],
                       ),
                     );
@@ -482,5 +479,29 @@ class ShopView extends GetView<ShopController> {
             ),
           ),
         ));
+  }
+}
+
+class productItemShimmer extends StatelessWidget {
+  const productItemShimmer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ShimmerWidget.rectangular(height: 150),
+          SizedBox(height: 5),
+          ShimmerWidget.rectangular(height: 20),
+          SizedBox(height: 5),
+          ShimmerWidget.rectangular(height: 10),
+          SizedBox(height: 5),
+          ShimmerWidget.rectangular(height: 10),
+        ],
+      ),
+    );
   }
 }

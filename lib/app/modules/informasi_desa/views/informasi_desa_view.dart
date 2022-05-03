@@ -11,6 +11,7 @@ import '../controllers/informasi_desa_controller.dart';
 class InformasiDesaView extends GetView<InformasiDesaController> {
   @override
   Widget build(BuildContext context) {
+    var infoDesaC = Get.put(InformasiDesaController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: dPrimaryColor,
